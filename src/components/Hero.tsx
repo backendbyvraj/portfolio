@@ -127,19 +127,19 @@ export default function Hero() {
             </div>
 
             <h1 style={{ fontSize:"clamp(2.8rem,6vw,4.5rem)", lineHeight:1.1, marginBottom:"0.75rem", fontWeight:900 }}>
-              <span style={{ color:"var(--color-text)" }}>Vraj Dev</span>
+              <span style={{ color:"var(--color-text)" }}>Vraj Pandya</span>
               <br />
-              <span className="gradient-text">Studio</span>
+              <span className="gradient-text">Full Stack Developer for Hire</span>
             </h1>
 
             {/* Clarify solo / role */}
             <div style={{ fontSize:"0.9rem", fontWeight:600, color:"var(--color-text-dim)", letterSpacing:"0.05em", marginBottom:"1.1rem" }}>
-              Founder &amp; Independent Full Stack Developer
+              React · Next.js · Flutter · Node.js · Laravel · Python
             </div>
 
             <h2 style={{ fontSize:"clamp(1.3rem,3vw,1.8rem)", fontWeight:600, color:"var(--color-text-muted)", marginBottom:"1.25rem" }}>
-              Building Digital{" "}
-              <span style={{ color:"var(--color-secondary)" }}>Experiences</span>
+              Freelance Full Stack Developer —{" "}
+              <span style={{ color:"var(--color-secondary)" }}>Surat, India</span>
             </h2>
 
             <p style={{ fontSize:"1.05rem", color:"var(--color-text-muted)", maxWidth:"500px", lineHeight:1.8, marginBottom:"2.5rem" }}>

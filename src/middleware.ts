@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 // ─── LAUNCH TIME: April 24, 2026 at 2:00 PM IST (UTC+5:30) ──────────────────
 const LAUNCH_TIME = new Date("2026-04-24T14:00:00+05:30");
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const now = new Date();
   const launched = now >= LAUNCH_TIME;
 

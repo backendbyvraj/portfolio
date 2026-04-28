@@ -208,7 +208,7 @@ export default function Skills() {
             &#9881; Development Skills
           </div>
           <h2 className="section-title">
-            Skills &amp; <span className="gradient-text">Technologies</span>
+            Full Stack Developer <span className="gradient-text">Skills &amp; Tech Stack</span>
           </h2>
           <div className="divider" />
           <p className="section-subtitle" style={{ marginTop: "1rem", maxWidth: "560px", margin: "1rem auto 0" }}>

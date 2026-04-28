@@ -113,11 +113,10 @@ export default function FeaturedProjects() {
           <div className="section-tag" style={{ justifyContent: "center" }}>
             &#9670; Featured Projects
           </div>
-          <h2 className="section-title">My Recent Work</h2>
+          <h2 className="section-title">Recent Web &amp; App <span className="gradient-text">Development Projects</span></h2>
           <div className="divider" />
           <p className="section-subtitle" style={{ marginTop: "1rem" }}>
-            A collection of projects that showcase my skills in building real-world
-            applications from scratch.
+            Real-world full stack projects — web apps, mobile apps, AI platforms, CRM systems, and trading bots built from scratch.
           </p>
         </div>
 

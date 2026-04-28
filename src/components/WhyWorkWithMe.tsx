@@ -68,13 +68,12 @@ export default function WhyWorkWithMe() {
             &#10022; Why Choose Me
           </div>
           <h2 className="section-title">
-            Why Work{" "}
-            <span className="gradient-text">With Me</span>
+            Why Hire{" "}
+            <span className="gradient-text">Vraj Pandya</span>
           </h2>
           <div className="divider" />
           <p className="section-subtitle" style={{ marginTop: "1rem" }}>
-            I bring both technical expertise and creative problem-solving to
-            every project, ensuring results that exceed expectations.
+            A dedicated Full Stack Developer who brings technical expertise and creative problem-solving to every project — web, app, AI, or CRM.
           </p>
         </div>
 

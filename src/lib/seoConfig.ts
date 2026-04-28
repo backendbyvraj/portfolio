@@ -35,9 +35,8 @@ export const META_TITLE =
 export const META_TITLE_TEMPLATE = `%s | ${BRAND_NAME}`;
 
 export const META_DESC =
-  `${AUTHOR_NAME} — Founder of ${BRAND_NAME}. Independent Full Stack Developer based in Surat, India. ` +
-  `Available worldwide for Web Apps, Mobile Apps, CRM, ERP, SaaS, Fintech & Desktop Software. ` +
-  `Expert in React, Next.js, Node.js, Flutter, Python. Let's build your next project.`;
+  `${AUTHOR_NAME} — Full Stack Developer for hire. React, Next.js, Node.js, Laravel & Flutter expert. ` +
+  `Based in Surat, India. Available for freelance & remote work worldwide.`;
 
 export const OG_TITLE =
   `${AUTHOR_NAME} | Full Stack Developer | ${BRAND_NAME}`;
