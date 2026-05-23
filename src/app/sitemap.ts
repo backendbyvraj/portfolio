@@ -2,6 +2,9 @@ import { MetadataRoute } from "next";
 import { projects } from "@/lib/projectsData";
 import { SITE_URL } from "@/lib/seoConfig";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const projectUrls: MetadataRoute.Sitemap = projects.map((p) => ({
     url: `${SITE_URL}/projects/${p.slug}`,
