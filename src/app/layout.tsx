@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import SmoothScroll from "@/components/SmoothScroll";
+import Interactions from "@/components/Interactions";
 import {
   SITE_URL,
   BRAND_NAME,
@@ -17,10 +19,15 @@ import {
   JSON_LD,
 } from "@/lib/seoConfig";
 
-const inter = Inter({
+// Body/UI: Geist · Display accents: Instrument Serif · Labels: Geist Mono
+const geist = Geist({ subsets: ["latin"], display: "swap", variable: "--font-body" });
+const geistMono = Geist_Mono({ subsets: ["latin"], display: "swap", variable: "--font-code" });
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-display",
 });
 
 export const metadata: Metadata = {
@@ -43,20 +50,11 @@ export const metadata: Metadata = {
     siteName: `${AUTHOR_NAME} - ${BRAND_NAME}`,
     title: OG_TITLE,
     description: OG_DESC,
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: `${AUTHOR_NAME} - Full Stack Developer | ${BRAND_NAME}`,
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: OG_TITLE,
     description: OG_DESC,
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -80,12 +78,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
+        <SmoothScroll />
+        <Interactions />
         <Header />
         <main>{children}</main>
         <Footer />

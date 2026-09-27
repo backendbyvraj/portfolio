@@ -9,11 +9,12 @@ import {
 } from "react-icons/fa";
 
 const SUBJECTS = [
-  { value: "freelance",     label: "Freelance Project" },
-  { value: "fulltime",      label: "Full-time Opportunity" },
-  { value: "collaboration", label: "Collaboration" },
-  { value: "consultation",  label: "Consultation" },
-  { value: "other",         label: "Other" },
+  { value: "New website",              label: "New business website" },
+  { value: "Web or mobile app",        label: "Web or mobile app" },
+  { value: "CRM / business software",  label: "CRM / business software" },
+  { value: "Redesign or SEO",          label: "Redesign or SEO fix" },
+  { value: "Full-time opportunity",    label: "Full-time opportunity" },
+  { value: "Other",                    label: "Something else" },
 ];
 
 export default function Contact() {
@@ -41,7 +42,7 @@ export default function Contact() {
   ];
 
   const socials = [
-    { icon: <FaGithub />,    href: "https://github.com",                                label: "GitHub",   color: "#a78bfa" },
+    { icon: <FaGithub />,    href: "https://github.com/backendbyvraj",                              label: "GitHub",   color: "#a78bfa" },
     { icon: <FaLinkedinIn />,href: "https://www.linkedin.com/in/pandya-vraj-b800b819b", label: "LinkedIn", color: "#0A66C2" },
     { icon: <FaWhatsapp />,  href: "https://wa.me/919726053886",                        label: "WhatsApp", color: "#25D366" },
     { icon: <FaEnvelope />,  href: "mailto:pandyavraj234@gmail.com",                    label: "Email",    color: "#8b5cf6" },
@@ -455,9 +456,9 @@ export default function Contact() {
                   width: "100%", padding: "0.9rem",
                   background: status === "sending"
                     ? "rgba(139,92,246,0.4)"
-                    : "linear-gradient(135deg, var(--color-primary), var(--color-secondary))",
+                    : "var(--btn-bg)",
                   border: "none", borderRadius: "var(--radius)",
-                  color: "#fff", fontSize: "0.95rem", fontWeight: 700,
+                  color: "var(--btn-fg)", fontSize: "0.95rem", fontWeight: 700,
                   cursor: status === "sending" ? "wait" : "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem",
                   transition: "all 0.25s",

@@ -29,7 +29,7 @@ const services = [
 ];
 
 const socials = [
-  { icon: <FaGithub />, href: "https://github.com/pandyavraj234", label: "GitHub" },
+  { icon: <FaGithub />, href: "https://github.com/backendbyvraj", label: "GitHub" },
   { icon: <FaLinkedinIn />, href: "https://www.linkedin.com/in/pandya-vraj-b800b819b", label: "LinkedIn" },
   { icon: <FaTwitter />, href: "https://x.com/pandyavraj234", label: "Twitter" },
   { icon: <FaInstagram />, href: "https://instagram.com/pandyavraj234", label: "Instagram" },
@@ -42,7 +42,7 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: "#07070f",
+        background: "var(--footer-bg)",
         borderTop: "1px solid rgba(139, 92, 246, 0.15)",
         paddingTop: "4rem",
       }}
@@ -203,41 +203,22 @@ export default function Footer() {
                 marginBottom: "1.25rem",
               }}
             >
-              Stay Updated
+              Have a project?
             </h4>
             <p style={{ fontSize: "0.88rem", marginBottom: "1rem", lineHeight: 1.7 }}>
-              Subscribe for latest projects and tech updates.
+              Tell me what you need — you&apos;ll get a clear plan and a fixed quote within 24 hours.
             </p>
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}
-            >
-              <input
-                type="email"
-                placeholder="your@email.com"
-                required
-                style={{
-                  background: "rgba(139, 92, 246, 0.05)",
-                  border: "1px solid rgba(139, 92, 246, 0.2)",
-                  borderRadius: "var(--radius)",
-                  padding: "0.7rem 1rem",
-                  color: "var(--color-text)",
-                  fontSize: "0.88rem",
-                  outline: "none",
-                  transition: "border-color 0.3s",
-                  width: "100%",
-                }}
-                onFocus={(e) =>
-                  ((e.currentTarget as HTMLElement).style.borderColor = "var(--color-primary)")
-                }
-                onBlur={(e) =>
-                  ((e.currentTarget as HTMLElement).style.borderColor = "rgba(139, 92, 246, 0.2)")
-                }
-              />
-              <button type="submit" className="btn btn-primary" style={{ justifyContent: "center" }}>
-                Subscribe
-              </button>
-            </form>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+              <Link href="/#contact" className="btn btn-primary">Get a free quote</Link>
+              <a
+                href="https://wa.me/919726053886?text=Hi%20Vraj%2C%20I%20have%20a%20project%20in%20mind"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline"
+              >
+                Chat on WhatsApp
+              </a>
+            </div>
           </div>
         </div>
 

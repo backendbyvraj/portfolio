@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SITE_URL, AUTHOR_EMAIL, GITHUB_URL, LINKEDIN_URL, WHATSAPP_NUM } from "@/lib/seoConfig";
+import { SITE_URL, AUTHOR_EMAIL, GITHUB_URL, LINKEDIN_URL, WHATSAPP_NUM, yearsOfExperience } from "@/lib/seoConfig";
 
-export const metadata: Metadata = {
-  title: "About Vraj Pandya — Full Stack Developer from Surat, India",
-  description:
-    "Vraj Pandya is a Full Stack Developer from Surat, India with 4+ years of experience. Expert in React, Next.js, Node.js, Laravel & Flutter. Available for freelance worldwide.",
-  alternates: {
-    canonical: `${SITE_URL}/about`,
-  },
-  openGraph: {
+// Re-render daily so the experience count rolls over without a redeploy.
+export const revalidate = 86400;
+
+export function generateMetadata(): Metadata {
+  const desc =
+    `Vraj Pandya is a Full Stack Developer from Surat, India with ${yearsOfExperience()}+ years of experience. ` +
+    "Expert in React, Next.js, Node.js, Laravel & Flutter. Available for freelance worldwide.";
+  return {
     title: "About Vraj Pandya — Full Stack Developer from Surat, India",
-    description:
-      "Vraj Pandya is a Full Stack Developer from Surat, India with 4+ years of experience. Expert in React, Next.js, Node.js, Laravel & Flutter. Available for freelance worldwide.",
-    url: `${SITE_URL}/about`,
-  },
-};
+    description: desc,
+    alternates: { canonical: `${SITE_URL}/about` },
+    openGraph: {
+      title: "About Vraj Pandya — Full Stack Developer from Surat, India",
+      description: desc,
+      url: `${SITE_URL}/about`,
+    },
+  };
+}
 
 const skills = [
   { category: "Frontend", items: ["React.js", "Next.js", "TypeScript", "Tailwind CSS"] },
@@ -57,7 +61,7 @@ export default function AboutPage() {
 
         {/* Intro */}
         <div style={{ marginBottom: "3rem" }}>
-          <div className="section-tag" style={{ marginBottom: "1rem" }}>◆ About</div>
+          <div className="section-tag" style={{ marginBottom: "1rem" }}>About</div>
           <h1
             style={{
               fontSize: "clamp(2rem,5vw,3rem)",
@@ -80,7 +84,7 @@ export default function AboutPage() {
           >
             Vraj Pandya is a <strong style={{ color: "var(--color-text)" }}>Full Stack Developer</strong> based
             in <strong style={{ color: "var(--color-text)" }}>Surat, Gujarat, India</strong>, with over{" "}
-            <strong style={{ color: "var(--color-text)" }}>4 years of experience</strong> building
+            <strong style={{ color: "var(--color-text)" }}>{yearsOfExperience()} years of experience</strong> building
             web applications, mobile apps, and SaaS products for clients across India and worldwide.
           </p>
 
@@ -93,7 +97,7 @@ export default function AboutPage() {
             }}
           >
             Specializing in <strong style={{ color: "var(--color-text)" }}>React, Next.js, Node.js, Laravel,
-            and Flutter</strong>, Vraj has delivered 50+ projects ranging from AI-powered content platforms
+            and Flutter</strong>, Vraj has built products ranging from AI-powered content platforms
             and real-time towing apps to multi-tenant school management SaaS and global telemedicine platforms.
           </p>
 

@@ -1,10 +1,10 @@
 "use client";
 
-import { SITE_URL, AUTHOR_EMAIL, WHATSAPP_NUM, GITHUB_URL, LINKEDIN_URL } from "@/lib/seoConfig";
+import { SITE_URL, AUTHOR_EMAIL, WHATSAPP_NUM, GITHUB_URL, LINKEDIN_URL, yearsOfExperience } from "@/lib/seoConfig";
 
 const PHONE   = "+91 97260 53886";
 const EMAIL   = "pandyavraj234@gmail.com";
-const GITHUB  = "github.com/pandyavraj234";
+const GITHUB  = "github.com/backendbyvraj";
 const LINKEDIN = "linkedin.com/in/pandya-vraj-b800b819b";
 
 // ── Skills ─────────────────────────────────────────────────────────────────
@@ -18,99 +18,100 @@ const skills = [
 ];
 
 // ── Projects for resume ─────────────────────────────────────────────────────
+// Client names are withheld under NDA; bullets describe what was built, without estimated metrics.
 const resumeProjects = [
   {
-    title: "Insight – AI Content Platform",
+    title: "AI Content Writing Platform",
     role: "Full Stack Developer",
     year: "2024",
     tech: "Next.js · Node.js · OpenAI API · MongoDB · Redis · TypeScript",
     bullets: [
-      "Built production-grade AI content platform using OpenAI API for auto-generating SEO-optimized blogs and reports.",
-      "Implemented real-time AI streaming with React Suspense, reducing content creation time by 80%.",
-      "Delivered multi-role admin system (Super Admin / Editor / Viewer) with analytics dashboard and Cloudinary-based image optimization.",
-      "Client's organic traffic grew 3× within 3 months of launch.",
+      "Built an AI content platform using the OpenAI API to generate SEO-optimised blogs and reports.",
+      "Implemented real-time streaming of AI output with React Suspense for a smooth editing experience.",
+      "Delivered a multi-role admin (Super Admin / Editor / Viewer) with analytics and Cloudinary image optimisation.",
+      "Built an SEO post-processing pipeline scoring readability, keyword density and semantic relevance.",
     ],
   },
   {
-    title: "EduSphere – School Management SaaS",
+    title: "Multi-School Management SaaS",
     role: "Full Stack Developer & System Architect",
     year: "2023",
     tech: "React · Node.js · MongoDB · TypeScript · Redis · Socket.io · Razorpay",
     bullets: [
-      "Architected multi-tenant SaaS for 15+ schools managing 5,000+ active students with complete data isolation.",
-      "Built three-tier role hierarchy (Global Admin → School Admin → Teacher/Parent) using policy-based access control.",
-      "Developed auto-graded MCQ exam engine with gamified leaderboards; reduced result processing from 2 days to real-time.",
-      "Integrated Razorpay for fee management with multi-installment plans and automated payment reminders.",
+      "Architected a multi-tenant SaaS for school groups with complete data isolation between schools.",
+      "Built a three-tier role hierarchy (Global Admin → School Admin → Teacher/Parent) with policy-based access control.",
+      "Developed an auto-graded MCQ exam engine with randomised papers and gamified leaderboards.",
+      "Integrated Razorpay for fee instalments with automated payment reminders and receipts.",
     ],
   },
   {
-    title: "MediGlobal – Worldwide Telemedicine Platform",
+    title: "Global Telemedicine Platform",
     role: "Full Stack Developer & System Architect",
     year: "2024",
     tech: "React · Node.js · WebRTC · Socket.io · PostgreSQL · Stripe · AWS · Redis",
     bullets: [
-      "Built global telemedicine platform connecting 200+ doctors across 18 countries with 1,500+ consultations completed.",
-      "Implemented end-to-end encrypted video consultations using WebRTC with custom signaling server (no 3rd-party dependency).",
-      "Engineered timezone-aware slot booking engine handling DST changes and multi-currency doctor payouts.",
-      "Live webinar module supports 500 concurrent viewers; became the platform's highest-revenue feature.",
+      "Built a telemedicine platform connecting patients with doctors across countries.",
+      "Implemented end-to-end encrypted video consultations using WebRTC with a custom signalling server.",
+      "Engineered time-zone-aware slot booking (including DST changes) and multi-currency doctor payouts.",
+      "Built a live webinar module with chat, registration and recordings.",
     ],
   },
   {
-    title: "RoadRescue – Real-Time Towing App",
+    title: "On-Demand Towing App",
     role: "Full Stack Developer (Flutter + Laravel)",
     year: "2024",
     tech: "Flutter · Laravel · Google Maps API · WebSocket · Firebase · MySQL",
     bullets: [
-      "Built Uber-like on-demand towing app (Flutter) deployed with 50+ registered towing companies.",
-      "Implemented geospatial driver-matching using MySQL spatial indexes with sub-second broadcast; avg. response time under 3 min.",
-      "Handled edge cases: auto-reassignment on driver cancellation, WebSocket reconnection with missed event replay.",
-      "Achieved 60% improvement in job dispatch efficiency vs. previous phone-based system.",
+      "Built an Uber-style on-demand towing app in Flutter with a Laravel backend and fleet admin panel.",
+      "Implemented geospatial driver matching with MySQL spatial indexes and real-time WebSocket broadcast.",
+      "Handled edge cases: auto-reassignment on driver cancellation and WebSocket reconnection with missed-event replay.",
+      "Added live route tracking, in-app chat, ratings and automated PDF invoicing.",
     ],
   },
   {
-    title: "DiamondCRM – Diamond & Textile Trader CRM",
+    title: "CRM & Accounting Software for Diamond and Textile Traders",
     role: "Full Stack Developer & Business Analyst",
     year: "2024",
     tech: "React · Node.js · PostgreSQL · TypeScript · Puppeteer · Chart.js",
     bullets: [
-      "Designed custom CRM replacing paper ledgers for Surat diamond and textile trading firms.",
-      "Built GST-compliant invoicing, double-entry bookkeeping, and aging reports identifying ₹12L in recovered dues within 2 months.",
-      "Integrated stock management with diamond 4C specifications and textile roll tracking with visual sample images.",
-      "Migrated 5 years of historical trade data; team of 8 now operates completely paperlessly.",
+      "Designed a custom CRM replacing paper ledgers for Surat diamond and textile trading firms.",
+      "Built GST-compliant invoicing, double-entry bookkeeping and 30/60/90-day ageing reports.",
+      "Integrated stock management with diamond 4C specifications and textile roll tracking.",
+      "Migrated historical trade data so the team could work fully paperless from any device.",
     ],
   },
   {
-    title: "AlgoTrade – Python Algorithmic Trading Bot",
+    title: "Algo Trading Bot for NSE/BSE",
     role: "Full Stack Developer (Python + React)",
     year: "2024",
     tech: "Python · FastAPI · AngelOne SmartAPI · asyncio · Pandas · React · PostgreSQL",
     bullets: [
-      "Built fully automated stock trading bot integrated with AngelOne SmartAPI for live NSE/BSE order execution.",
-      "Solved Python GIL bottleneck using asyncio for tick data ingestion + multiprocessing for strategy execution (latency <50ms).",
-      "Implemented risk controls: daily loss limits, auto square-off at 3:20 PM, and capital-based position sizing.",
-      "Users reported 15–20% improvement in trade execution precision over manual trading.",
+      "Built an automated trading bot integrated with AngelOne SmartAPI for live NSE/BSE order execution.",
+      "Used asyncio for tick ingestion and multiprocessing for strategy execution to work around the Python GIL.",
+      "Implemented risk controls: daily loss limits, auto square-off at 3:20 PM and capital-based position sizing.",
+      "Built a React dashboard for live P&L, open positions and an exportable trade log.",
     ],
   },
   {
-    title: "Payment Gateway Integration Suite",
+    title: "Payment Gateway Integrations",
     role: "Backend Developer",
     year: "2023–2024",
     tech: "Node.js · Razorpay · Apple Pay · HDFC API · Amex · PostgreSQL",
     bullets: [
-      "Integrated 5 payment gateways (Razorpay, Apple Pay, Amex, HDFC, Fasthub) across multiple client projects.",
-      "Built gateway adapter pattern normalizing all events into a unified transaction object regardless of gateway used.",
-      "Achieved 99.99% webhook reliability with idempotent processing; combined volume exceeds ₹2Cr/month.",
+      "Integrated Razorpay, Apple Pay, Amex, HDFC SmartGateway and Fasthub across multiple client projects.",
+      "Built a gateway adapter pattern normalising every event into one transaction model.",
+      "Implemented idempotent webhook processing and automatic retries to prevent duplicate charges.",
     ],
   },
   {
-    title: "SportHub – Sports Club Management Platform",
+    title: "Sports Club Management Platform",
     role: "Full Stack Developer & Product Designer",
     year: "2024",
     tech: "React · Node.js · MongoDB · Socket.io · Razorpay · Casbin · AWS S3",
     bullets: [
-      "Built all-in-one platform for 8 sports clubs managing 1,200+ student registrations.",
-      "Implemented drag-and-drop website builder enabling non-technical admins to create club websites in under 20 minutes.",
-      "Designed policy-based permission system (Casbin) for club → center → coach → parent hierarchy.",
+      "Built an all-in-one platform for sports clubs: registrations, coaches, fees, chat, shop and ground booking.",
+      "Implemented a drag-and-drop website builder so non-technical admins can publish club websites.",
+      "Designed a policy-based permission system (Casbin) for the club → centre → coach → parent hierarchy.",
     ],
   },
 ];
@@ -228,6 +229,7 @@ export default function ResumePage() {
         .ach-list { margin: 0; padding-left: 16px; }
         .ach-list li { font-size: 12.5px; color: #334155; line-height: 1.7; }
         .ach-list li::marker { color: #8b5cf6; }
+        .ach-list li.ach-note { list-style: none; margin-left: -16px; margin-top: 6px; font-size: 11px; color: #94a3b8; font-style: italic; }
 
         /* ── Print overrides ──────────────────────────────────── */
         @media print {
@@ -264,7 +266,7 @@ export default function ResumePage() {
             ↓ Download / Print as PDF
           </button>
           <p className="tip">
-            Click the button above → in the print dialog select <strong>"Save as PDF"</strong>
+            Click the button above → in the print dialog select <strong>&ldquo;Save as PDF&rdquo;</strong>
             → set Paper size to <strong>A4</strong>, Margins to <strong>None/Minimum</strong>.
           </p>
         </div>
@@ -289,13 +291,13 @@ export default function ResumePage() {
           <section className="r-section">
             <h2 className="r-section-title">Professional Summary</h2>
             <p className="r-summary">
-              Results-driven Full Stack Developer and Founder of Vraj Dev Studio with 4+ years of hands-on experience
+              Results-driven Full Stack Developer and Founder of Vraj Dev Studio with <span suppressHydrationWarning>{yearsOfExperience()}+</span> years of hands-on experience
               delivering production-grade web applications, mobile apps, SaaS platforms, and CRM/ERP systems for
               clients across India and worldwide. Proven track record building end-to-end products — from AI-powered
               content platforms to real-time telemedicine solutions to algorithmic trading bots — using modern tech
               stacks including React, Next.js, Node.js, Flutter, and Python. Adept at architecting multi-tenant
-              systems, integrating payment gateways (Razorpay, Stripe, HDFC), and delivering measurable business
-              outcomes: 3× traffic growth, ₹12L dues recovery, 5,000+ active SaaS users. Available for freelance
+              systems, integrating payment gateways (Razorpay, Stripe, HDFC), and building real-time and
+              SEO-first products for businesses in Surat, across India and worldwide. Available for freelance
               projects, remote roles, and long-term collaborations worldwide.
             </p>
           </section>
@@ -353,14 +355,13 @@ export default function ResumePage() {
             <section className="r-section">
               <h2 className="r-section-title">Key Achievements</h2>
               <ul className="ach-list">
-                <li>Delivered 13+ production projects across Web, Mobile, CRM, SaaS &amp; Fintech domains</li>
-                <li>3× organic traffic growth for AI content platform within 3 months</li>
-                <li>₹12L outstanding dues recovered via CRM aging report visibility</li>
-                <li>5,000+ active students on multi-tenant SaaS (EduSphere)</li>
-                <li>1,500+ telemedicine consultations on global platform (MediGlobal)</li>
-                <li>₹2Cr+/month payment volume across integrated gateway projects</li>
-                <li>Google Page 1 rankings for 40+ local SEO keywords (PropVista)</li>
-                <li>Ranked on Google for "wholesale saree fabric Surat" in 2 months</li>
+                <li>Delivered production projects across web, mobile, CRM, SaaS &amp; fintech</li>
+                <li>Built multi-tenant SaaS with role-based access and full data isolation</li>
+                <li>Shipped real-time systems: live tracking, WebRTC video and WebSocket dispatch</li>
+                <li>Integrated five payment gateways with idempotent, duplicate-safe webhooks</li>
+                <li>Replaced paper ledgers with a custom CRM for Surat trading firms</li>
+                <li>Built SEO-first websites with per-page metadata and JSON-LD structured data</li>
+                <li className="ach-note">Client names withheld under NDA</li>
               </ul>
             </section>
           </div>

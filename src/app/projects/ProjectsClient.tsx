@@ -1,439 +1,103 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { FaArrowLeft, FaArrowRight, FaGithub } from "react-icons/fa";
-import { projects, categories } from "@/lib/projectsData";
-
-/* ── Card image auto-carousel ───────────────────────────────────── */
-function CardCarousel({ images, title }: { images: string[]; title: string }) {
-  const [active, setActive] = useState(0);
-  const timerRef = useRef<gsap.core.Tween | null>(null);
-  const total = images.length;
-
-  useEffect(() => {
-    if (total <= 1) return;
-    function tick() {
-      setActive((cur) => (cur + 1) % total);
-      timerRef.current = gsap.delayedCall(2.5, tick);
-    }
-    timerRef.current = gsap.delayedCall(2.5, tick);
-    return () => { timerRef.current?.kill(); };
-  }, [total]);
-
-  return (
-    <>
-      {images.map((img, i) => (
-        <img
-          key={i}
-          src={img}
-          alt={`${title} ${i + 1}`}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            opacity: active === i ? 1 : 0,
-            transition: "opacity 0.7s ease",
-            zIndex: 0,
-          }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-        />
-      ))}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-          zIndex: 1,
-          pointerEvents: "none",
-        }}
-      />
-      <span
-        style={{
-          fontSize: "3rem",
-          fontWeight: 900,
-          color: "rgba(255,255,255,0.15)",
-          letterSpacing: "-0.05em",
-          userSelect: "none",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        &lt;/&gt;
-      </span>
-      {total > 1 && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "0.55rem",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            gap: "0.3rem",
-            zIndex: 5,
-            pointerEvents: "none",
-          }}
-        >
-          {images.map((_, i) => (
-            <span
-              key={i}
-              style={{
-                width: active === i ? "16px" : "6px",
-                height: "6px",
-                borderRadius: "50px",
-                background: active === i ? "#fff" : "rgba(255,255,255,0.4)",
-                transition: "all 0.3s",
-                display: "block",
-              }}
-            />
-          ))}
-        </div>
-      )}
-    </>
-  );
-}
+import { FaArrowRight, FaWhatsapp } from "react-icons/fa";
+import { projects, NDA_NOTE } from "@/lib/projectsData";
+import { ProjectCard, PROJECT_CARD_CSS } from "@/components/FeaturedProjects";
 
 export default function ProjectsClient() {
   const [active, setActive] = useState("All");
 
-  const filtered =
-    active === "All" ? projects : projects.filter((p) => p.category === active);
+  // Filters come from the data, so a category can never show "(0)".
+  const filters = useMemo(() => {
+    const counts = new Map<string, number>();
+    projects.forEach((p) => counts.set(p.category, (counts.get(p.category) ?? 0) + 1));
+    return [["All", projects.length] as const, ...Array.from(counts.entries())];
+  }, []);
+
+  const shown = active === "All" ? projects : projects.filter((p) => p.category === active);
 
   return (
-    <main style={{ minHeight: "100vh", paddingTop: "6rem", paddingBottom: "5rem" }}>
+    <main className="pl">
       <div className="container">
-        {/* Back link */}
-        <Link
-          href="/#projects"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            color: "var(--color-text-muted)",
-            fontSize: "0.9rem",
-            marginBottom: "2.5rem",
-            transition: "color 0.2s",
-            textDecoration: "none",
-          }}
-          onMouseEnter={(e) =>
-            ((e.currentTarget as HTMLElement).style.color = "var(--color-primary-light)")
-          }
-          onMouseLeave={(e) =>
-            ((e.currentTarget as HTMLElement).style.color = "var(--color-text-muted)")
-          }
-        >
-          <FaArrowLeft /> Back to Home
-        </Link>
-
-        {/* Header */}
-        <div style={{ marginBottom: "3rem" }}>
-          <div className="section-tag">◆ Portfolio</div>
-          <h1
-            className="section-title"
-            style={{ marginTop: "0.75rem", textAlign: "left" }}
-          >
-            All Projects
+        <header className="pl-head">
+          <nav className="pl-crumbs mono" aria-label="Breadcrumb">
+            <Link href="/">Home</Link><span>/</span><span aria-current="page">Projects</span>
+          </nav>
+          <div className="section-tag">Portfolio · {projects.length} case studies</div>
+          <h1 className="pl-title">
+            Work that grows <span className="gradient-text">real businesses.</span>
           </h1>
-          <div className="divider" style={{ marginLeft: 0 }} />
-          <p className="section-subtitle" style={{ marginTop: "1rem", textAlign: "left" }}>
-            {projects.length} projects across web, mobile, SaaS, AI, Python, and more.
+          <p className="pl-sub">
+            Websites, mobile apps, CRMs and SaaS platforms I&apos;ve built for businesses in Surat,
+            across India and worldwide — each with the problem, the solution and the result.
           </p>
-        </div>
+          <p className="pl-nda mono">{NDA_NOTE}</p>
+        </header>
 
-        {/* Filter */}
-        <div
-          style={{
-            display: "flex",
-            gap: "0.5rem",
-            flexWrap: "wrap",
-            marginBottom: "2.5rem",
-          }}
-        >
-          {categories.map((cat) => (
+        <div className="pl-filters" role="tablist" aria-label="Filter projects">
+          {filters.map(([cat, count]) => (
             <button
               key={cat}
+              role="tab"
+              aria-selected={active === cat}
               onClick={() => setActive(cat)}
-              style={{
-                padding: "0.5rem 1.25rem",
-                borderRadius: "50px",
-                border: "1.5px solid",
-                borderColor:
-                  active === cat ? "var(--color-primary)" : "var(--color-border)",
-                background:
-                  active === cat ? "rgba(139,92,246,0.15)" : "transparent",
-                color:
-                  active === cat
-                    ? "var(--color-primary-light)"
-                    : "var(--color-text-muted)",
-                fontSize: "0.88rem",
-                fontWeight: 500,
-                cursor: "pointer",
-                transition: "all 0.25s",
-              }}
+              className={`pl-filter ${active === cat ? "is-active" : ""}`}
             >
-              {cat}
-              <span
-                style={{
-                  marginLeft: "0.4rem",
-                  fontSize: "0.75rem",
-                  opacity: 0.7,
-                }}
-              >
-                (
-                {cat === "All"
-                  ? projects.length
-                  : projects.filter((p) => p.category === cat).length}
-                )
-              </span>
+              {cat} <span className="mono">{count}</span>
             </button>
           ))}
         </div>
 
-        {/* Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1.5rem",
-          }}
-          className="projects-grid"
-        >
-          {filtered.map((project) => (
-            <Link
-              key={project.id}
-              href={`/projects/${project.slug}`}
-              style={{ textDecoration: "none", color: "inherit", display: "block" }}
-            >
-              <div
-                className="card project-card"
-                style={{
-                  padding: 0,
-                  overflow: "hidden",
-                  position: "relative",
-                  height: "100%",
-                  cursor: "pointer",
-                }}
-              >
-                {/* Thumbnail */}
-                <div
-                  style={{
-                    height: "200px",
-                    background: project.gradient,
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden",
-                  }}
-                >
-                  <CardCarousel images={project.images} title={project.title} />
-
-                  {project.featured && (
-                    <span
-                      style={{
-                        position: "absolute",
-                        top: "1rem",
-                        left: "1rem",
-                        background: "rgba(139,92,246,0.9)",
-                        color: "#fff",
-                        fontSize: "0.7rem",
-                        fontWeight: 700,
-                        padding: "0.2rem 0.7rem",
-                        borderRadius: "50px",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.05em",
-                        zIndex: 2,
-                      }}
-                    >
-                      Featured
-                    </span>
-                  )}
-
-                  <div
-                    className="project-overlay"
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background: "rgba(0,0,0,0.65)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      opacity: 0,
-                      transition: "opacity 0.3s",
-                      zIndex: 3,
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        color: "#fff",
-                        fontWeight: 600,
-                        fontSize: "0.95rem",
-                        background: "var(--color-primary)",
-                        padding: "0.55rem 1.2rem",
-                        borderRadius: "50px",
-                      }}
-                    >
-                      View Details <FaArrowRight style={{ fontSize: "0.8rem" }} />
-                    </span>
-                  </div>
-                </div>
-
-                {/* Body */}
-                <div style={{ padding: "1.25rem" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      marginBottom: "0.5rem",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    <h2
-                      style={{
-                        fontSize: "1rem",
-                        color: "var(--color-text)",
-                        fontWeight: 700,
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      {project.title}
-                    </h2>
-                    <span className="badge" style={{ flexShrink: 0 }}>
-                      {project.category}
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      fontSize: "0.85rem",
-                      lineHeight: 1.7,
-                      marginBottom: "0.75rem",
-                      color: "var(--color-text-muted)",
-                    }}
-                  >
-                    {project.tagline}
-                  </p>
-                  <div
-                    style={{
-                      fontSize: "0.78rem",
-                      color: "var(--color-text-muted)",
-                      marginBottom: "0.75rem",
-                    }}
-                  >
-                    {project.year} · {project.role}
-                  </div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                    {project.tech.slice(0, 4).map((t) => (
-                      <span
-                        key={t}
-                        style={{
-                          background: "rgba(139,92,246,0.1)",
-                          border: "1px solid rgba(139,92,246,0.2)",
-                          color: "var(--color-primary-light)",
-                          fontSize: "0.73rem",
-                          padding: "0.15rem 0.6rem",
-                          borderRadius: "50px",
-                          fontWeight: 500,
-                        }}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                    {project.tech.length > 4 && (
-                      <span
-                        style={{
-                          background: "rgba(139,92,246,0.05)",
-                          border: "1px solid rgba(139,92,246,0.15)",
-                          color: "var(--color-text-muted)",
-                          fontSize: "0.73rem",
-                          padding: "0.15rem 0.6rem",
-                          borderRadius: "50px",
-                        }}
-                      >
-                        +{project.tech.length - 4} more
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+        <div className="pl-grid">
+          {shown.map((p) => <ProjectCard key={p.slug} project={p} span={6} />)}
         </div>
 
-        {/* Bottom CTA */}
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "4rem",
-            padding: "3rem",
-            background: "rgba(139,92,246,0.05)",
-            border: "1px solid rgba(139,92,246,0.15)",
-            borderRadius: "var(--radius-lg)",
-          }}
-        >
-          <h3
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: 700,
-              marginBottom: "0.75rem",
-            }}
-          >
-            Have a project in mind?
-          </h3>
-          <p
-            style={{
-              color: "var(--color-text-muted)",
-              marginBottom: "1.5rem",
-              maxWidth: "480px",
-              margin: "0 auto 1.5rem",
-            }}
-          >
-            Let&apos;s build something great together. I&apos;m available for freelance
-            and full-time opportunities worldwide.
-          </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <Link href="/#contact" className="btn btn-primary">
-              Get in Touch <FaArrowRight style={{ fontSize: "0.85rem" }} />
-            </Link>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-outline"
-            >
-              <FaGithub /> GitHub
+        <section className="pl-cta">
+          <h2>Don&apos;t see your industry here?</h2>
+          <p>Every project starts with a free call. Tell me what your business needs — you&apos;ll get a plan and a fixed quote within 24 hours.</p>
+          <div className="pl-cta-btns">
+            <Link href="/#contact" className="btn btn-primary">Get a free quote <FaArrowRight className="btn-arrow" /></Link>
+            <a href="https://wa.me/919726053886?text=Hi%20Vraj%2C%20I%20have%20a%20project%20in%20mind" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+              <FaWhatsapp /> Chat on WhatsApp
             </a>
           </div>
-        </div>
+        </section>
       </div>
 
-      <style>{`
-        .project-card:hover .project-overlay {
-          opacity: 1 !important;
+      <style>{PROJECT_CARD_CSS + `
+        .pl { min-height: 100vh; padding: 7rem 0 5rem; }
+        .pl-crumbs { display: flex; gap: 0.55rem; font-size: 0.75rem; color: var(--color-text-dim); margin-bottom: 2rem; }
+        .pl-crumbs a { color: var(--color-text-muted); }
+        .pl-head { margin-bottom: 2.5rem; max-width: 820px; }
+        .pl-title { font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.05em; color: var(--color-text); margin-bottom: 1.25rem; }
+        .pl-sub { font-size: 1.15rem; line-height: 1.7; max-width: 680px; }
+        .pl-nda { font-size: 0.72rem; color: var(--color-text-dim); margin-top: 1rem; }
+        .pl-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+        .pl-filter {
+          display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;
+          padding: 0.55rem 1.05rem; border-radius: 999px; font-size: 0.9rem; font-weight: 500;
+          color: var(--color-text-muted); background: transparent; border: 1px solid var(--color-border);
+          transition: color 0.2s, background 0.2s, border-color 0.2s;
         }
-        @media (max-width: 1024px) {
-          .projects-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
+        .pl-filter .mono { font-size: 0.7rem; color: var(--color-text-dim); }
+        .pl-filter:hover { color: var(--color-text); border-color: var(--color-border-strong); }
+        .pl-filter.is-active { color: var(--btn-fg); background: var(--btn-bg); border-color: transparent; }
+        .pl-filter.is-active .mono { color: inherit; opacity: 0.7; }
+        .pl-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.25rem; }
+        .pl-cta {
+          margin-top: 4rem; padding: 3rem 2rem; text-align: center; border-radius: var(--radius-lg);
+          border: 1px solid var(--color-border); background: var(--color-bg-card); position: relative; overflow: hidden;
         }
-        @media (max-width: 640px) {
-          .projects-grid {
-            grid-template-columns: 1fr !important;
-          }
+        .pl-cta::before { content: ""; position: absolute; inset: -50% 10% auto; height: 120%; background: radial-gradient(closest-side, var(--aurora-1), transparent 70%); filter: blur(40px); pointer-events: none; }
+        .pl-cta > * { position: relative; }
+        .pl-cta h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); letter-spacing: -0.035em; color: var(--color-text); margin-bottom: 0.75rem; }
+        .pl-cta p { max-width: 560px; margin: 0 auto 1.6rem; }
+        .pl-cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+        @media (max-width: 900px) {
+          .pl-grid { grid-template-columns: 1fr; }
+          .pl-grid .fp-card { grid-column: auto !important; }
         }
       `}</style>
     </main>

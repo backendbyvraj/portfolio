@@ -1,8 +1,10 @@
-﻿"use client";
+"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { HiMenu, HiX } from "react-icons/hi";
+import { FaArrowRight } from "react-icons/fa";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const navLinks = [
@@ -16,13 +18,37 @@ const navLinks = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [active, setActive] = useState("Home");
+  const pathname = usePathname();
+  const [homeActive, setActive] = useState("Home");
+
+  // On the homepage the clicked section is highlighted; sub-pages highlight their own link.
+  const active =
+    pathname === "/" ? homeActive
+    : pathname.startsWith("/projects") ? "Projects"
+    : pathname.startsWith("/about") ? "About"
+    : "";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Sliding hover pill: glides to whichever link is hovered, then back to the active one.
+  const linksRef = useRef<HTMLUListElement>(null);
+  const pillRef = useRef<HTMLSpanElement>(null);
+  const movePill = (el: HTMLElement | null) => {
+    const pill = pillRef.current;
+    if (!pill) return;
+    if (!el) { pill.style.opacity = "0"; return; }
+    pill.style.opacity = "1";
+    pill.style.width = `${el.offsetWidth}px`;
+    pill.style.transform = `translateX(${el.offsetLeft}px)`;
+  };
+  const resetPill = () =>
+    movePill(linksRef.current?.querySelector<HTMLElement>(".hd-link-active") ?? null);
+  useEffect(() => { resetPill(); });
 
   const handleNav = (label: string) => {
     setActive(label);
@@ -30,202 +56,147 @@ export default function Header() {
   };
 
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        padding: "0 1.5rem",
-        transition: "all 0.3s ease",
-        background: scrolled
-          ? "var(--header-scrolled-bg)"
-          : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled
-          ? "1px solid rgba(139, 92, 246, 0.15)"
-          : "1px solid transparent",
-        boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.4)" : "none",
-      }}
-    >
-      <nav
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          maxWidth: "var(--max-width)",
-          margin: "0 auto",
-          height: "70px",
-        }}
-      >
-        {/* Logo */}
-        <Link
-          href="#home"
-          onClick={() => handleNav("Home")}
-          style={{
-            fontSize: "1.3rem",
-            fontWeight: 800,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          <span className="gradient-text">Vraj</span>
-          <span style={{ color: "var(--color-text)", marginLeft: "0.3rem" }}>
-            Dev Studio
+    <header className={`hd ${scrolled || menuOpen ? "hd-scrolled" : ""}`}>
+      <nav className="hd-bar">
+        <Link href="/#home" onClick={() => handleNav("Home")} className="hd-logo" aria-label="Vraj Dev Studio — home">
+          <span className="hd-logo-mark">V</span>
+          <span className="hd-logo-text">
+            <span className="serif">Vraj</span> Dev Studio
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <ul
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.25rem",
-            listStyle: "none",
-          }}
-          className="desktop-nav"
-        >
+        <ul className="hd-links" ref={linksRef} onMouseLeave={resetPill}>
+          <span ref={pillRef} className="hd-pill" aria-hidden="true" />
           {navLinks.map((link) => (
             <li key={link.label}>
               <a
                 href={link.href}
                 onClick={() => handleNav(link.label)}
-                style={{
-                  padding: "0.5rem 1rem",
-                  borderRadius: "50px",
-                  fontSize: "0.9rem",
-                  fontWeight: 500,
-                  color:
-                    active === link.label
-                      ? "var(--color-primary-light)"
-                      : "var(--color-text-muted)",
-                  background:
-                    active === link.label
-                      ? "rgba(139, 92, 246, 0.12)"
-                      : "transparent",
-                  border:
-                    active === link.label
-                      ? "1px solid rgba(139, 92, 246, 0.3)"
-                      : "1px solid transparent",
-                  transition: "all 0.3s ease",
-                  display: "block",
-                }}
-                onMouseEnter={(e) => {
-                  if (active !== link.label) {
-                    (e.currentTarget as HTMLElement).style.color =
-                      "var(--color-text)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (active !== link.label) {
-                    (e.currentTarget as HTMLElement).style.color =
-                      "var(--color-text-muted)";
-                  }
-                }}
+                onMouseEnter={(e) => movePill(e.currentTarget)}
+                className={`hd-link ${active === link.label ? "hd-link-active" : ""}`}
               >
                 {link.label}
               </a>
             </li>
           ))}
-          <li>
-            <a
-              href="#contact"
-              className="btn btn-primary"
-              onClick={() => handleNav("Contact")}
-              style={{ padding: "0.55rem 1.4rem", fontSize: "0.88rem" }}
-            >
-              Hire Me
-            </a>
-          </li>
-          <li style={{ display: "flex", alignItems: "center" }}>
-            <ThemeToggle />
-          </li>
         </ul>
 
-        {/* Mobile right-side: theme toggle + hamburger */}
-        <div style={{ display: "none", alignItems: "center", gap: "0.5rem" }} className="mobile-right">
+        <div className="hd-right">
           <ThemeToggle />
+          <Link href="/#contact" onClick={() => handleNav("Contact")} className="btn btn-primary hd-cta">
+            Hire me <FaArrowRight className="btn-arrow" />
+          </Link>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="mobile-menu-btn"
+            className="hd-burger"
             aria-label="Toggle menu"
-            style={{
-              background: "none",
-              border: "none",
-              color: "var(--color-text)",
-              cursor: "pointer",
-              fontSize: "1.6rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "0.2rem",
-            }}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <HiX /> : <HiMenu />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       {menuOpen && (
-        <div
-          className="mobile-menu"
-          style={{
-            background: "var(--mobile-menu-bg)",
-            backdropFilter: "blur(20px)",
-            borderTop: "1px solid var(--color-border)",
-            padding: "1rem 1.5rem 1.5rem",
-          }}
-        >
-          <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+        <div className="hd-menu">
+          <ul>
             {navLinks.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
                   onClick={() => handleNav(link.label)}
-                  style={{
-                    display: "block",
-                    padding: "0.75rem 1rem",
-                    borderRadius: "var(--radius)",
-                    fontSize: "0.95rem",
-                    fontWeight: 500,
-                    color:
-                      active === link.label
-                        ? "var(--color-primary-light)"
-                        : "var(--color-text-muted)",
-                    background:
-                      active === link.label
-                        ? "rgba(139, 92, 246, 0.1)"
-                        : "transparent",
-                    transition: "all 0.25s",
-                  }}
+                  className={`hd-menu-link ${active === link.label ? "hd-link-active" : ""}`}
                 >
                   {link.label}
                 </a>
               </li>
             ))}
-            <li style={{ marginTop: "0.5rem" }}>
-              <a
-                href="#contact"
-                className="btn btn-primary"
-                onClick={() => handleNav("Contact")}
-                style={{ width: "100%", justifyContent: "center" }}
-              >
-                Hire Me
-              </a>
-            </li>
           </ul>
+          <Link href="/#contact" onClick={() => handleNav("Contact")} className="btn btn-primary" style={{ width: "100%" }}>
+            Hire me <FaArrowRight className="btn-arrow" />
+          </Link>
         </div>
       )}
 
       <style>{`
-        @media (max-width: 768px) {
-          .desktop-nav {
-            display: none !important;
-          }
-          .mobile-right {
-            display: flex !important;
-          }
+        .hd {
+          position: fixed;
+          top: 14px;
+          left: 0;
+          right: 0;
+          z-index: 1000;
+          padding: 0 1rem;
+          pointer-events: none;
+        }
+        .hd-bar, .hd-menu {
+          pointer-events: auto;
+          max-width: 1280px;
+          margin: 0 auto;
+          border: 1px solid transparent;
+          transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+        .hd-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          height: 60px;
+          padding: 0 0.6rem 0 1.1rem;
+          border-radius: 999px;
+        }
+        .hd-scrolled .hd-bar, .hd-menu {
+          background: var(--header-scrolled-bg);
+          border-color: var(--color-border);
+          backdrop-filter: blur(18px) saturate(1.4);
+          -webkit-backdrop-filter: blur(18px) saturate(1.4);
+          box-shadow: 0 10px 40px -12px rgba(0, 0, 0, 0.35);
+        }
+        .hd-logo { display: flex; align-items: center; gap: 0.6rem; color: var(--color-text); font-weight: 600; letter-spacing: -0.02em; }
+        .hd-logo-mark {
+          width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+          font-family: var(--font-display), Georgia, serif; font-style: italic; font-size: 1.15rem;
+          color: #fff; background: var(--gradient-primary);
+          box-shadow: 0 6px 18px -6px var(--color-primary);
+        }
+        .hd-logo-text { font-size: 1rem; }
+        .hd-logo-text .serif { font-size: 1.15rem; }
+        .hd-links { position: relative; display: flex; align-items: center; gap: 0.15rem; list-style: none; }
+        .hd-pill {
+          position: absolute; left: 0; top: 0; height: 100%; border-radius: 999px;
+          background: var(--color-bg-input); box-shadow: inset 0 0 0 1px var(--color-border);
+          opacity: 0; pointer-events: none;
+          transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), width 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s;
+        }
+        .hd-link {
+          position: relative; z-index: 1;
+          display: block; padding: 0.45rem 0.9rem; border-radius: 999px;
+          font-size: 0.9rem; color: var(--color-text-muted);
+          transition: color 0.2s, background 0.2s;
+        }
+        .hd-link:hover { color: var(--color-text); }
+        .hd-link-active { color: var(--color-text); }
+        .hd-menu .hd-link-active { background: var(--color-bg-input); }
+        .hd-right { display: flex; align-items: center; gap: 0.5rem; }
+        .hd-cta { padding: 0.6rem 1.15rem; font-size: 0.88rem; }
+        .hd-burger {
+          display: none; width: 42px; height: 42px; border-radius: 50%;
+          align-items: center; justify-content: center;
+          background: var(--color-bg-input); border: 1px solid var(--color-border);
+          color: var(--color-text); font-size: 1.35rem; cursor: pointer;
+        }
+        .hd-menu {
+          margin-top: 0.5rem;
+          border-radius: 22px;
+          padding: 0.75rem;
+        }
+        .hd-menu ul { list-style: none; margin-bottom: 0.75rem; }
+        .hd-menu-link {
+          display: block; padding: 0.8rem 1rem; border-radius: 14px;
+          font-size: 1rem; color: var(--color-text-muted);
+        }
+        @media (max-width: 860px) {
+          .hd-links, .hd-cta { display: none; }
+          .hd-burger { display: inline-flex; }
         }
       `}</style>
     </header>
